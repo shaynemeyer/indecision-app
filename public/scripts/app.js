@@ -29,6 +29,12 @@ var removeAll = function removeAll() {
   renderTemplate();
 };
 
+var onMakeDecision = function onMakeDecision() {
+  var randomNum = Math.floor(Math.random() * app.options.length);
+  var option = app.options[randomNum];
+  alert(option);
+};
+
 var user = {
   name: "Shayne",
   age: "?",
@@ -76,16 +82,13 @@ var renderTemplate = function renderTemplate() {
     React.createElement(
       "ol",
       null,
-      React.createElement(
-        "li",
-        null,
-        "item one"
-      ),
-      React.createElement(
-        "li",
-        null,
-        "item two"
-      )
+      app.options.map(function (opt) {
+        return React.createElement(
+          "li",
+          { key: opt },
+          opt
+        );
+      })
     ),
     React.createElement(
       "form",
@@ -95,6 +98,11 @@ var renderTemplate = function renderTemplate() {
         "button",
         null,
         "Add Option"
+      ),
+      React.createElement(
+        "button",
+        { disabled: app.options.length === 0, onClick: onMakeDecision },
+        "What should I do?"
       ),
       React.createElement(
         "button",
