@@ -7,16 +7,25 @@ console.log('app running');
 const app = {
   title: "Indecision App",
   subtitle: "This is some info",
-  options: ['One', 'Two']
+  options: []
 };
 
-const template = (
-  <div>
-    <h1>{app.title}</h1>
-    {app.subtitle && <p>app.subtitle</p>}
-    <p>{app.options.length>0 ? 'Here are your options': 'No options'}</p>
-  </div>
-);
+const onFormSubmit =(e) => {
+  e.preventDefault();
+
+  const option = e.target.elements.option.value;
+
+  if(option) {
+    app.options.push(option);
+    e.target.elements.option.value = '';
+    renderTemplate();
+  }
+};
+
+const removeAll = () => {
+  app.options = [];
+  renderTemplate();
+}
 
 const user = {
   name: "Shayne",
@@ -30,28 +39,31 @@ function getLocation(location) {
   }
 }
 
-let count = 0;
-const addOne = () => {
-  console.log('addOne');
-};
-
-const minusOne = () => {
-  console.log('minusOne');
-};
-
-const resetButton = () => {
-  console.log('reset');
-};
-
-const templateTwo = (
-  <div>
-    <h1>Count: {count}</h1>
-    <button onClick={addOne}>+1</button>
-    <button onClick={minusOne}>-1</button>
-    <button onClick={resetButton}>reset</button>
-  </div>
-);
 
 const appRoot = document.getElementById('app');
 
-ReactDOM.render(templateTwo, appRoot);
+
+const renderTemplate = () => {
+
+  const template = (
+    <div>
+      <h1>{app.title}</h1>
+      {app.subtitle && <p>app.subtitle</p>}
+      <p>{app.options.length>0 ? 'Here are your options': 'No options'}</p>
+      <p>{app.options.length}</p>
+      <ol>
+        <li>item one</li>
+        <li>item two</li>
+      </ol>
+      <form onSubmit={onFormSubmit}>
+        <input type="text" name="option"/>
+        <button>Add Option</button>
+        <button onClick={removeAll}>Remove all</button>
+      </form>
+    </div>
+  );
+
+  ReactDOM.render(template, appRoot);
+};
+
+renderTemplate();
