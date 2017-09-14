@@ -1,9 +1,3 @@
-const obj = {
-  name: 'Vikram',
-  getName() {
-    return this.name;
-  }
-};
 
 class IndecisionApp extends React.Component {
   constructor(props) {
@@ -14,7 +8,7 @@ class IndecisionApp extends React.Component {
     this.handlePick = this.handlePick.bind(this);
     this.handleAddOption = this.handleAddOption.bind(this);
     this.state = {
-      options: props.options
+      options: []
     };
   }
   componentDidMount() {
@@ -82,10 +76,6 @@ class IndecisionApp extends React.Component {
       </div>
     );
   }
-}
-
-IndecisionApp.defaultProps = {
-  options: []
 }
 
 const Header = (props) => {
