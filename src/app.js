@@ -17,14 +17,31 @@ class IndecisionApp extends React.Component {
       options: props.options
     };
   }
+  componentDidMount() {
+    try {
+      // fetch data
+      const json = localStorage.getItem('options');
+      const options = JSON.parse(json);
+      if(options){
+        this.setState(() => ({ options }));
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
+  componentDidUpdate(prevProps, prevState) {
+    // saving data
+    if(prevState.options.length !== this.state.options.length) {
+      const json = JSON.stringify(this.state.options);
+      localStorage.setItem('options', json);
+    }
+  }
   handleDeleteOptions(){
     this.setState(() => ({ options: [] }));
   }
   handleDeleteOption(optionToDelete) {
     this.setState((prevState) => ({
-      options: prevState.options.filter((option) => {
-        return optionToDelete !== option
-      })
+      options: prevState.options.filter((option) => optionToDelete !== option)
     }));
   }
   handlePick(){
@@ -41,8 +58,9 @@ class IndecisionApp extends React.Component {
 
     this.setState((prevState) => ({ options: prevState.options.concat(option) }));
   }
+
+
   render() {
-    const title = 'Indecision';
     const subtitle = 'Put your life in the hands of a computer!';
     return (
       <div>
@@ -136,10 +154,14 @@ class AddOption extends React.Component {
   }
   handleAddOption(e) {
     e.preventDefault();
-    const option = e.target.elements.option.value;
+    const option = e.target.elements.option.value.trim();
     const error = this.props.handleAddOption(option);
 
     this.setState(() => ({ error }));
+
+    if(!error) {
+      e.target.elements.option.value = '';
+    }
   }
   render() {
     return (
